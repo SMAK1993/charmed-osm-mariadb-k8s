@@ -1,0 +1,45 @@
+"options":
+    "user":
+      "type": "string"
+      "description": "The database user name."
+      "default": "mysql"
+    "password":
+      "type": "string"
+      "description": "The database user password."
+      "default": "password"
+    "database":
+      "type": "string"
+      "description": "The database name."
+      "default": "database"
+    "root_password":
+      "type": "string"
+      "description": "The database root password."
+      "default": "root"
+    "mysql_port":
+      "type": "string"
+      "description": "The mysql port"
+      "default": "3306"
+    "query-cache-type":
+      "default": "OFF"
+      "type": "string"
+      "description": "Query cache is usually a good idea, but can hurt concurrency.\
+        \ Valid values are \"OFF\", \"ON\", or \"DEMAND\"."
+    "query-cache-size":
+      "default": !!int "0"
+      "type": "int"
+      "description": "Override the computed version from dataset-size. Still works if\
+        \ query-cache-type is \"OFF\" since sessions can override the cache type setting\
+        \ on their own."
+    "ha-mode":
+      "type": "boolean"
+      "description": "Indicates if the charm should have the capabilities to scale"
+      "default": !!bool "false"
+    "image":
+      "type": "string"
+      "description": "OCI image"
+      "default": "rocks.canonical.com:443/mariadb/server:10.3"
+    "ha-image":
+      "type": "string"
+      "description": "OCI image"
+      "default": "rocks.canonical.com:443/canonicalosm/galera-mysql:latest"
+  
