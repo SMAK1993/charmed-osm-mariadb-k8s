@@ -1,1 +1,1 @@
-./mod/interface-mysql/interface_mysql.py
+../mod/interface-mysql/interface_mysql.py
