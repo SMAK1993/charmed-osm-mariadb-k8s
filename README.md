@@ -1,6 +1,6 @@
 # Overview
 
-MariaDb Charm for Kubernetes using the Operator Framework.
+MariaDb Charm for Kubernetes using the Operator Framework.  
 This charm provides the mysql interface for other charmed-osm charms.
 
 # Usage
