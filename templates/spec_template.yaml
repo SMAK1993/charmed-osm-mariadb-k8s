@@ -1,0 +1,30 @@
+version: 2
+containers:
+  - name: %(name)s
+    image: %(docker_image)s
+    ports:
+      - containerPort: %(mysql_port)s
+        protocol: TCP
+        name: main
+    config:
+      MARIADB_ROOT_PASSWORD: %(root_password)s
+      MARIADB_USER: %(user)s
+      MARIADB_PASSWORD: %(password)s
+      MARIADB_DATABASE: %(database)s
+    kubernetes:
+      readinessProbe:
+        tcpSocket:
+          port: %(mysql_port)s
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 5
+        successThreshold: 1
+        failureThreshold: 3
+      livenessProbe:
+        tcpSocket:
+          port: %(mysql_port)s
+        initialDelaySeconds: 120
+        periodSeconds: 10
+        timeoutSeconds: 5
+        successThreshold: 1
+        failureThreshold: 3
