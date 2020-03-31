@@ -7,7 +7,7 @@ This charm provides the mysql interface for other charmed-osm charms.
 
 To use, first pull in dependencies via `git submodule`:
 
-```bash
+```
 git submodule init
 git submodule update
 ```
@@ -16,7 +16,7 @@ You must specify key configuration attributes when deploying,
 or else arbitary defaults will be used. The attributes which
 should be set are:
 
-```bash
+```
 - user
 - password
 - database
@@ -24,16 +24,18 @@ should be set are:
 ```
 
 # Example
-
+```
 $ juju deploy . \
 &nbsp;&nbsp;&nbsp;&nbsp;--config user=syed \
 &nbsp;&nbsp;&nbsp;&nbsp;--config password=mohammad \
 &nbsp;&nbsp;&nbsp;&nbsp;--config database=adnan \
 &nbsp;&nbsp;&nbsp;&nbsp;--config root_password=karim
-
+```
 These values may also be in a config.yaml file, eg
 
+```
 $ juju deploy mysql --config config.yaml
+```
 
 Finally, deploy and relate a database:
 
