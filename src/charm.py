@@ -49,19 +49,18 @@ class MariaDbCharm(CharmBase):
         logging.info('START')
         self.model.unit.status = MaintenanceStatus('Configuring pod')
         podSpec = self.makePodSpec()
-        self.model.pod.set_spec(podSpec)
+        if self.model.unit.is_leader():
+            self.model.pod.set_spec(podSpec)
         self.state.isStarted = True
         self.state.podSpec = podSpec
         self.model.unit.status = ActiveStatus('ready')
 
     def on_stop(self, event):
         logging.info('STOP')
+        self.state.isStarted = False
 
     def on_update_status(self, event):
         logging.info('UPDATE STATUS')
-        relation = self.model.get_relation('mysql')
-        if relation is not None:
-            logging.info(relation.data[self.model.unit].get('host'))
 
     def on_config_changed(self, event):
         logging.info('CONFIG CHANGED')
