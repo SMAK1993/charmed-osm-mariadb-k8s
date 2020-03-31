@@ -26,10 +26,10 @@ should be set are:
 # Example
 ```
 $ juju deploy . \
-&nbsp;&nbsp;&nbsp;&nbsp;--config user=syed \
-&nbsp;&nbsp;&nbsp;&nbsp;--config password=mohammad \
-&nbsp;&nbsp;&nbsp;&nbsp;--config database=adnan \
-&nbsp;&nbsp;&nbsp;&nbsp;--config root_password=karim
+--config user=syed \
+--config password=mohammad \
+--config database=adnan \
+--config root_password=karim
 ```
 These values may also be in a config.yaml file, eg
 
