@@ -25,7 +25,7 @@ should be set are:
 
 # Example
 ```
-$ juju deploy . \
+juju deploy . \
 --config user=syed \
 --config password=mohammad \
 --config database=adnan \
@@ -95,3 +95,110 @@ juju relate mariadb-k8s keystone-k8s
     └── spec_template.yaml
 ```
 
+# Development Guide
+
+## Install Test Dependencies
+
+1. Install pyenv so that you can test with different versions of Python
+
+```
+curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+```
+
+2. Append the following to your ~/.bashrc then log out and log back in
+
+```
+export PATH="/home/mark/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+```
+
+3. Install development packages
+
+```
+sudo apt install build-essential libssl-dev zlib1g-dev libbz2-dev \
+    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+    xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
+```
+
+4. Install Python 3.6.10 and 3.7.7
+
+```
+pyenv install 3.6.10
+pyenv install 3.7.7
+```
+
+NOTE: For more available versions, run `pyenv install --list`
+
+5. Create a virtualenv for this project
+
+```
+pyenv virtualenv 3.6.10 mariadb-3.6.10
+```
+
+Your newly created virtualenv should now be activated if your prompt change
+to the following:
+
+```
+(mariadb-3.6.10) ubuntu@dev-18-04-2:~/src/mariadb-operator$
+```
+
+Notice the things in parentheses that corresponds to the virtualenv you created
+in the previous step. This is thanks to the coordination of pyenv-virtualenv and
+a `.python-version` file in the rootdir of this project.
+
+If you `cd ..` or `cd` anywhere else the virtualenv will automatically be
+deactivated. When you `cd` back into the project dir, the virtualenv will
+automatically be activated.
+
+6. Install more development dependencies:
+
+```
+python3 -m pip install --upgrade pip
+python3 -m pip install "pip-tools>=5.2.1,<5.3"
+pip-sync test-requirements.txt
+```
+
+7. Subsequent installation of development dependencies
+
+```
+pip-sync test-requirements.txt
+```
+
+## Adding A Test Dependency
+
+1. Add it to `test-requirements.in` and then compile it:
+
+```
+echo "foo=>1.0.0,<1.1.0" >> test-requirements.in
+pip-compile test-requirements.in
+```
+
+2. Sync the packages installed in your env to the ones declared
+   in the regenerated `test-requirements.txt`
+
+```
+pip-sync test-requirements.txt
+```
+
+3. Commit `test-requirements.in` and `test-requirements.txt`. Both
+   files should now be updated and the `foo` package installed in your
+   local machine. Make sure to commit both files to the repo to let your
+   teammates know of the new dependency.
+
+```
+git add test-requirements.*
+git commit -m "Add foo to test-requirements.txt"
+git push origin
+```
+
+## Runnin All The Tests
+
+1. Ensure you start with a new terminal session because sometimes the shell
+   won't find tox immediately after installation.
+
+2. Run:
+
+```
+tox
+```
