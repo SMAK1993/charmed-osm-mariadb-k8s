@@ -3,6 +3,8 @@
 *.egg-info
 __pycache__
 .tox
+.coverage
+htmlcov
 
 # MacOS files
 .DS_Store
@@ -21,4 +23,3 @@ __pycache__
 
 # Make files
 .last-*
-

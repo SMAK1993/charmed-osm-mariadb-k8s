@@ -1,6 +1,6 @@
 import json
 
-from ops.framework import EventBase, EventsBase, EventSource, Object, StoredState
+from ops.framework import EventBase, ObjectEvents, EventSource, Object, StoredState
 
 import logging
 
@@ -20,7 +20,7 @@ class NewClient(EventBase):
         self.client = MySQLInterfaceClient(relation, self.framework.model.unit)
 
 
-class MySQLEvents(EventsBase):
+class MySQLEvents(ObjectEvents):
     new_client = EventSource(NewClient)
 
 
