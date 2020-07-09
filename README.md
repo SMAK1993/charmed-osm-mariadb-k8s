@@ -192,7 +192,7 @@ git commit -m "Add foo to test-requirements.txt"
 git push origin
 ```
 
-## Runnin All The Tests
+## Running All The Tests
 
 1. Ensure you start with a new terminal session because sometimes the shell
    won't find tox immediately after installation.
@@ -202,3 +202,17 @@ git push origin
 ```
 tox
 ```
+
+## Viewing the Coverage Report
+
+To view the coverage report, run the tests first and then run:
+
+```
+make coverage-server
+```
+
+This will run a simple web server on port 5000 that will serve the files
+in the auto-generated `htmlcov/` directory. You may leave this server running
+in a separate session as you run the tests so that you can just switch back
+to the browser and hit refresh to see the changes to your coverage down to
+the line of code.
