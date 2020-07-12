@@ -3,47 +3,57 @@
 import sys
 sys.path.append('lib')
 
-from ops.charm import CharmBase, CharmEvents
+from ops.charm import CharmBase
 from ops.main import main
-from ops.framework import StoredState, Object
+from ops.framework import StoredState
 from ops.model import (
     ActiveStatus,
-    BlockedStatus,
     MaintenanceStatus,
-    UnknownStatus,
-    WaitingStatus,
-    ModelError,
 )
 
 from interface_mysql_provides import MySQL
 
 import logging
-import subprocess
 
 import yaml
 
 logging.basicConfig(level=logging.DEBUG)
 
+
 class MariaDbCharm(CharmBase):
     state = StoredState()
 
-    def __init__(self, framework, key):
-        super().__init__(framework, key)
-        
+    def __init__(self, *args):
+        super().__init__(*args)
+
         self.state.set_default(isStarted=False)
         self.mysql = MySQL(self, 'mysql')
 
-        self.framework.observe(self.on.start, self)
-        self.framework.observe(self.on.stop, self)
-        self.framework.observe(self.on.update_status, self)
-        self.framework.observe(self.on.config_changed, self)
-        self.framework.observe(self.on.upgrade_charm, self)
-        self.framework.observe(self.on.leader_elected, self)
-        self.framework.observe(self.on.mysql_relation_joined, self)
-        self.framework.observe(self.on.mysql_relation_changed, self)
-        self.framework.observe(self.on.mysql_relation_departed, self)
-        self.framework.observe(self.on.mysql_relation_broken, self)
-        self.framework.observe(self.mysql.on.new_client, self)
+        # The latest version of the Operator Framework will raise an error
+        # if you simply provided `self` as the second argument. It now requires
+        # that you always explicitly declare the handler for the event.
+        self.framework.observe(self.on.start,
+                               self.on_start)
+        self.framework.observe(self.on.stop,
+                               self.on_stop)
+        self.framework.observe(self.on.update_status,
+                               self.on_update_status)
+        self.framework.observe(self.on.config_changed,
+                               self.on_config_changed)
+        self.framework.observe(self.on.upgrade_charm,
+                               self.on_upgrade_charm)
+        self.framework.observe(self.on.leader_elected,
+                               self.on_leader_elected)
+        self.framework.observe(self.on.mysql_relation_joined,
+                               self.on_mysql_relation_joined)
+        self.framework.observe(self.on.mysql_relation_changed,
+                               self.on_mysql_relation_changed)
+        self.framework.observe(self.on.mysql_relation_departed,
+                               self.on_mysql_relation_departed)
+        self.framework.observe(self.on.mysql_relation_broken,
+                               self.on_mysql_relation_broken)
+        self.framework.observe(self.mysql.on.new_client,
+                               self.on_new_client)
 
     def on_start(self, event):
         logging.info('START')
@@ -112,7 +122,7 @@ class MariaDbCharm(CharmBase):
             with open("templates/spec_template.yaml") as spec_file:
                 podSpecTemplate = spec_file.read()
             dockerImage = self.model.config['image']
- 
+
         data = {
             "name": self.model.app.name,
             "docker_image": dockerImage,
@@ -126,6 +136,7 @@ class MariaDbCharm(CharmBase):
         podSpec = podSpecTemplate % data
         podSpec = yaml.load(podSpec)
         return podSpec
+
 
 if __name__ == "__main__":
     main(MariaDbCharm)
